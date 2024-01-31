@@ -14,7 +14,7 @@ export default function HomeScreen({ navigation }) {
     const [storedData, setStoredData] = useState([]);
     const [run, setRun] = useState(true);
 
-    const loadStoredData = async () => {
+    const loadStoredData = async (data) => {
         try {
             const dataAsyncStorage = await AsyncStorage.getItem('@Like');
             if (dataAsyncStorage !== null) {
@@ -24,7 +24,7 @@ export default function HomeScreen({ navigation }) {
                     const elementString = JSON.stringify(element);
                     return JSON.parse(dataAsyncStorage).some((item) => JSON.stringify(item) === elementString);
                 });
-                console.log('thứ tự like ',resultArray);
+               
                 setLikedProducts(resultArray)
             } else {
                 setStoredData([]);
@@ -39,7 +39,7 @@ export default function HomeScreen({ navigation }) {
             getData('/orchids')
             .then((data) => {
                 setData(data.data);
-                loadStoredData();
+                loadStoredData(data.data);
                 })
                 .catch((error) => {
                     console.log(error);

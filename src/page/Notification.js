@@ -14,7 +14,7 @@ export default function Notification({ navigation }) {
     const [storedData, setStoredData] = useState([]);
     const [run, setRun] = useState(true);
 
-    const loadStoredData = async () => {
+    const loadStoredData = async (data) => {
         try {
             const dataAsyncStorage = await AsyncStorage.getItem('@Like');
             if (dataAsyncStorage !== null) {
@@ -41,7 +41,8 @@ export default function Notification({ navigation }) {
             getData('/orchids')
             .then((data) => {
                 setData(data.data);
-                loadStoredData();
+                loadStoredData(data.data);
+
                 })
                 .catch((error) => {
                     console.log(error);

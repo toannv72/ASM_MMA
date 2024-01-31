@@ -1,0 +1,41 @@
+{
+    "orchids": [
+        {
+            "id": "1",
+            "name": "Lan đẹp tuyệt vời 1",
+            "image": "https://cdn.tgdd.vn/Files/2021/07/24/1370576/hoa-lan-tim-dac-diem-y-nghia-va-cach-trong-hoa-no-dep-202107242028075526.jpg",
+            "isNatural": true,
+            "origin":"Thái Lan",
+            "category": "Quý Hiếm",
+            "createdAt":"2023-10-30T10:52:11.450+00:00"
+        },
+        {
+            "id": "2",
+            "name": "Lan đẹp tuyệt vời 2",
+            "image": "https://cdn.tgdd.vn/Files/2021/07/24/1370576/hoa-lan-tim-dac-diem-y-nghia-va-cach-trong-hoa-no-dep-202107242028075526.jpg",
+            "isNatural": true,
+            "origin":"Thái Lan",
+            "category": "Quý Hiếm",
+            "createdAt":"2023-10-30T10:52:11.450+00:00"
+        },
+        {
+            "id": "3",
+            "name": "Lan đẹp tuyệt vời ông mặt trời Lan đẹp tuyệt vời ông mặt trời Lan đẹp tuyệt vời ông mặt trời Lan đẹp tuyệt vời ông mặt trời  Lan đẹp tuyệt vời ông mặt trời Lan đẹp tuyệt vời ông mặt trời ",
+            "image": "https://cdn.tgdd.vn/Files/2021/07/24/1370576/hoa-lan-tim-dac-diem-y-nghia-va-cach-trong-hoa-no-dep-202107242028075526.jpg",
+            "isNatural": true,
+            "origin":"Thái Lan",
+            "category": "Quý Hiếm",
+            "createdAt":"2023-10-30T10:52:11.450+00:00"
+        },
+        {
+            "id": "4",
+            "name": "Lan đẹp tuyệt vời 4",
+            "image": "https://cdn.tgdd.vn/Files/2021/07/24/1370576/hoa-lan-tim-dac-diem-y-nghia-va-cach-trong-hoa-no-dep-202107242028075526.jpg",
+            "isNatural": true,
+            "origin":"Thái Lan",
+            "category": "Quý Hiếm",
+            "createdAt":"2023-10-30T10:52:11.450+00:00"
+        }
+    ]
+  
+}

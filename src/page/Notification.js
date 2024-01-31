@@ -16,11 +16,18 @@ export default function Notification({ navigation }) {
 
     const loadStoredData = async () => {
         try {
-
             const dataAsyncStorage = await AsyncStorage.getItem('@Like');
             if (dataAsyncStorage !== null) {
                 setStoredData(JSON.parse(dataAsyncStorage));
-                console.log(1111111111, JSON.parse(dataAsyncStorage));
+                console.log(JSON.parse(dataAsyncStorage));
+                const resultArray = data.map((element) => {
+                    const elementString = JSON.stringify(element);
+                    return JSON.parse(dataAsyncStorage).some((item) => JSON.stringify(item) === elementString);
+                });
+
+                console.log(JSON.parse(dataAsyncStorage));
+                console.log('thứ tự like ',resultArray);
+                setLikedProducts(resultArray)
             } else {
                 setStoredData([]);
             }
@@ -29,34 +36,22 @@ export default function Notification({ navigation }) {
         }
     };
 
-
-
-    useEffect(() => {
-        loadStoredData()
-        const resultArray = storedData.map((element) => {
-            const elementString = JSON.stringify(element);
-            return storedData.some((item) => JSON.stringify(item) === elementString);
-        });
-        setLikedProducts(resultArray)
-    }, [run]);
     useFocusEffect(
         useCallback(() => {
-            loadStoredData();
             getData('/orchids')
-                .then((data) => {
-                    setData(data.data);
+            .then((data) => {
+                setData(data.data);
+                loadStoredData();
                 })
                 .catch((error) => {
                     console.log(error);
                 })
-            setRun(!run)
+
             return () => {
-                console.log('resultArray61', likedProducts);
-
             };
-        }, [])
-    );
+        }, []),
 
+    );
 
     const handleLike = (index, product) => {
         const updatedLikedProducts = [...likedProducts];

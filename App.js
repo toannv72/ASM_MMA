@@ -4,10 +4,9 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import HomeScreen from "./src/page/Home";
-import { Survey } from "./src/page/Survey";
-import { Notification } from "./src/page/notification/Notification";
 import { StyleSheet } from "react-native";
 import ProfileSettingScreen from "./src/page/Profile";
+import Notification from "./src/page/Notification";
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -25,12 +24,7 @@ const App = () => {
     </NavigationContainer>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FFF", // Đặt màu nền trắng cho toàn bộ ứng dụng
-  },
-});
+
 function MyBottomNavigationBar() {
   return (
     <Tab.Navigator

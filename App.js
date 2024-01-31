@@ -7,6 +7,7 @@ import HomeScreen from "./src/page/Home";
 import { StyleSheet } from "react-native";
 import ProfileSettingScreen from "./src/page/Profile";
 import Notification from "./src/page/Notification";
+import Detail from "./src/page/Detail";
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -19,7 +20,10 @@ const App = () => {
           options={{ headerLeft: null, headerShown: false }}
           component={MyBottomNavigationBar}
         />
-
+        <Stack.Screen
+          name="Detail"
+          component={Detail}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -28,7 +32,7 @@ const App = () => {
 function MyBottomNavigationBar() {
   return (
     <Tab.Navigator
-  
+
       screenOptions={({ route }) => ({
         tabBarShowLabel: false,
         tabBarStyle: {
@@ -40,7 +44,7 @@ function MyBottomNavigationBar() {
           backgroundColor: '#fff',
           borderRadius: 15,
           height: 90
-      },
+        },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
           if (route.name === "Home") {

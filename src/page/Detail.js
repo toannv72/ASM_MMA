@@ -5,25 +5,25 @@ import { useCallback, useEffect, useState } from 'react';
 import { Card } from '@rneui/themed';
 import PetProfile from './PetProfile';
 import { getData } from '../api/api';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useRoute } from '@react-navigation/native';
 import { Entypo } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-export default function HomeScreen({ navigation }) {
-    const [data, setData] = useState([]);
-    const [likedProducts, setLikedProducts] = useState([]);
+export default function Detail({ navigation }) {
+    const [data, setData] = useState({});
+    const [likedProducts, setLikedProducts] = useState(null);
     const [storedData, setStoredData] = useState([]);
-
+    const route = useRoute();
+    const { itemData } = route.params;
     const loadStoredData = async (data) => {
         try {
             const dataAsyncStorage = await AsyncStorage.getItem('@Like');
+            setStoredData(JSON.parse(dataAsyncStorage));
+
             if (dataAsyncStorage !== null) {
-                setStoredData(JSON.parse(dataAsyncStorage));
-                const resultArray = data.map((element) => {
-                    const elementString = JSON.stringify(element);
-                    return JSON.parse(dataAsyncStorage).some((item) => JSON.stringify(item) === elementString);
-                });
-                setLikedProducts(resultArray)
+                const storedData = JSON.parse(dataAsyncStorage);
+                // Check if the data.id is present in the storedData array
+                const isLiked = storedData.some((item) => item.id === data.id);
+                setLikedProducts(isLiked);
             } else {
                 setStoredData([]);
             }
@@ -34,7 +34,7 @@ export default function HomeScreen({ navigation }) {
 
     useFocusEffect(
         useCallback(() => {
-            getData('/orchids')
+            getData(`/orchids/${itemData}`)
                 .then((data) => {
                     setData(data.data);
                     loadStoredData(data.data);
@@ -50,15 +50,14 @@ export default function HomeScreen({ navigation }) {
     );
 
     const handleLike = (index, product) => {
-        const updatedLikedProducts = [...likedProducts];
-        updatedLikedProducts[index] = !updatedLikedProducts[index];
-        setLikedProducts(updatedLikedProducts);
+
+        setLikedProducts(!likedProducts);
         // Kiểm tra xem sản phẩm đã được thích hay chưa
         const isLiked = storedData.some(item => item.id === product.id);
-
         // Nếu chưa tồn tại, thì thêm vào mảng storedData
         if (!isLiked) {
-            setStoredData([...storedData, product])
+
+            console.log(111111111222111, storedData);
             const updatedStoredData = [...storedData, product];
             AsyncStorage.setItem('@Like', JSON.stringify(updatedStoredData));
 
@@ -68,47 +67,35 @@ export default function HomeScreen({ navigation }) {
 
     };
     const handleUnlike = (index, product) => {
-        const updatedLikedProducts = [...likedProducts];
-        updatedLikedProducts[index] = !updatedLikedProducts[index];
-        setLikedProducts(updatedLikedProducts);
+        setLikedProducts(!likedProducts);
         // Loại bỏ sản phẩm khỏi mảng storedData
         const updatedStoredData = storedData.filter(item => item.id !== product.id);
         setStoredData(updatedStoredData)
         AsyncStorage.setItem('@Like', JSON.stringify(updatedStoredData));
-
         return
-
     };
     return (
         <View style={styles.container} >
 
             <ScrollView >
                 <View style={{ flexDirection: 'column-reverse', rowGap: 10, padding: 14 }}>
-                    {data.map((data, index) => (
+
+                    <View style={styles.origin}>
+                        <Image source={{ uri: data.image }} style={styles.image} />
                         <View style={{ padding: 10 }}>
-                            <TouchableOpacity
-                                style={styles.origin}
-                                key={index}
-                                onPress={() => {
-                                    navigation.navigate("Detail", { itemData: data.id });
-                                }}
-                            >
-                                <Image source={{ uri: data.image }} style={styles.image} />
-                                <View style={{ padding: 10 }} >
-                                    <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">{data.name}</Text>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <View>
-                                            <Text>{`Xuất xứ : ${data.origin}`}</Text>
-                                            <Text>{`Thể loại: ${data.category}`}</Text>
-                                        </View>
-                                    </View>
+                            <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">{data.name}</Text>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <View >
+                                    <Text>{`Xuất xứ : ${data.origin}`}</Text>
+                                    <Text>{`Thể loại: ${data.category}`}</Text>
                                 </View>
-                            </TouchableOpacity>
-                            <View style={{ marginTop: -50, marginRight: 10, flexDirection: 'row', justifyContent: 'flex-end', }}>
-                                {likedProducts[index] ? <Entypo style={{ padding: 5 }} pointerEvents="none" onPress={() => handleUnlike(index, data)} name="heart" size={40} color="red" /> : <Entypo style={{ padding: 5 }} pointerEvents="none" onPress={() => handleLike(index, data)} name="heart-outlined" size={40} color="#555555" />}
+                                <View >
+                                    {likedProducts ? <Entypo onPress={() => handleUnlike("index", data)} name="heart" size={40} color="red" /> : <Entypo onPress={() => handleLike("index", data)} name="heart-outlined" size={40} color="#555555" />}
+                                </View>
                             </View>
                         </View>
-                    ))}
+                    </View>
+
                 </View>
                 <View style={{ height: 120 }}></View>
             </ScrollView>

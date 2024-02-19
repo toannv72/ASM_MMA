@@ -43,7 +43,11 @@ function MyBottomNavigationBar() {
           elevation: 0,
           backgroundColor: '#fff',
           borderRadius: 15,
-          height: 90
+          height: 90,
+          elevation: 30, // Bóng đổ cho Android
+          shadowColor: '#000', // Màu của bóng đổ cho iOS
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.4,
         },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
@@ -69,7 +73,7 @@ function MyBottomNavigationBar() {
       <Tab.Screen
         name="Like"
         options={{ headerShown: false }}
-        component={Notification}
+        component={ProfileSettingScreen}
       />
       <Tab.Screen
         name="Profile"

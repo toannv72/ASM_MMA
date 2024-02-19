@@ -85,10 +85,10 @@ export default function HomeScreen({ navigation }) {
             <ScrollView >
                 <View style={{ flexDirection: 'column-reverse', rowGap: 10, padding: 14 }}>
                     {data.map((data, index) => (
-                        <View style={{ padding: 10 }}>
+                        <View style={{ padding: 10 }}  key={index}>
                             <TouchableOpacity
                                 style={styles.origin}
-                                key={index}
+                               
                                 onPress={() => {
                                     navigation.navigate("Detail", { itemData: data.id });
                                 }}

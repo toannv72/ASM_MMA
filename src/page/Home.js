@@ -5,9 +5,13 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Entypo } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import gioHang from '../../assets/gioHang.png';
+
 export default function HomeScreen({ navigation }) {
     const [data, setData] = useState([]);
     const [likedProducts, setLikedProducts] = useState([]);
+    const [currentPage, setCurrentPage] = useState("A");
     const [storedData, setStoredData] = useState([]);
 
     const loadStoredData = async (data) => {
@@ -31,6 +35,7 @@ export default function HomeScreen({ navigation }) {
 
     useFocusEffect(
         useCallback(() => {
+            setCurrentPage("A")
             getData('/orchids')
                 .then((data) => {
                     setData(data.data);
@@ -45,7 +50,53 @@ export default function HomeScreen({ navigation }) {
         }, []),
 
     );
+    const renderContent = () => {
+        switch (currentPage) {
+            case "A":
+                getData('/orchids')
+                    .then((data) => {
+                        setData(data.data);
+                        loadStoredData(data.data);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
+                return;
+            case "B":
+                getData('/orchids?category=Quý Hiếm')
+                    .then((data) => {
+                        setData(data.data);
+                        loadStoredData(data.data);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
+                return;
+            case "C":
+                getData('/orchids?category=lâu năm')
+                    .then((data) => {
+                        setData(data.data);
+                        loadStoredData(data.data);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
+                return;
+            default:
+                return;
+        }
+    };
+    useEffect(() => {
+        renderContent();
+    }, [currentPage]);
 
+    const getButtonStyle = (page) => {
+
+        return currentPage === page ? styles.selectedButton : styles.button;
+    };
+    const getTextStyle = (page) => {
+        return currentPage === page ? styles.selectedButtonText : styles.buttonText;
+    };
     const handleLike = (index, product) => {
         const updatedLikedProducts = [...likedProducts];
         updatedLikedProducts[index] = !updatedLikedProducts[index];
@@ -77,20 +128,57 @@ export default function HomeScreen({ navigation }) {
 
     };
     const handleSearchbarFocus = () => {
-      
+
         navigation.navigate("Search", { itemData: 1 });
     };
 
     return (
         <View style={styles.container} >
             <TouchableOpacity
-                style={{ marginTop: 30, marginBottom:10,marginLeft:20,marginRight:20, padding: 15, borderWidth: 2, borderColor: 'gray', borderRadius: 15 ,backgroundColor:"white"}}
+                style={{ marginTop: 30, marginLeft: 20, marginRight: 20, padding: 15, borderWidth: 2, borderColor: 'gray', borderRadius: 15, backgroundColor: "white" }}
                 onPress={handleSearchbarFocus}
             >
                 <Text>Search</Text>
             </TouchableOpacity>
+            <SafeAreaView>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    <View style={styles.tab}>
+                        <TouchableOpacity
+                            style={getButtonStyle("A")}
+                            onPress={() => setCurrentPage("A")}
+                        >
+                            <Text style={getTextStyle("A")}>Tất cả</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={getButtonStyle("B")}
+                            onPress={() => setCurrentPage("B")}
+                        >
+                            <Text style={getTextStyle("B")}>Quý hiếm</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={getButtonStyle("C")}
+                            onPress={() => setCurrentPage("C")}
+                        >
+                            <Text style={getTextStyle("C")}>Lâu năm</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
+            </SafeAreaView>
             <ScrollView >
                 <View style={{ flexDirection: 'column-reverse', rowGap: 10, padding: 14 }}>
+                    {data.length == 0 ? <View>
+
+                        <View>
+                            <Image
+                                style={{ width: "100%", height: 400 }}
+                                source={gioHang}
+                            />
+                            <Text style={{ color: '#fff', fontSize: 20, padding: 30, textAlign: 'center' }}>
+                               
+                            </Text>
+                        </View>
+
+                    </View> : <></>}
                     {data.map((data, index) => (
                         <View style={{ padding: 10 }} key={index}>
                             <TouchableOpacity
@@ -151,5 +239,44 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 4,
-    }
+    },
+    tab: {
+        flexDirection: "row",
+        marginLeft: 10,
+    },
+    button: {
+        width: 120,
+        backgroundColor: "#fff",
+        borderRadius: 10,
+        padding: 5,
+        marginLeft: 10,
+        marginRight: 10,
+        marginBottom: 10,
+    },
+    selectedButton: {
+        width: 120,
+        backgroundColor: "#000",
+        borderRadius: 10,
+        padding: 5,
+        marginLeft: 10,
+        marginRight: 10,
+        marginBottom: 10,
+    },
+    buttonText: {
+        padding: 5,
+        fontWeight: "400",
+        fontSize: 16,
+        color: "#000",
+        textAlign: "center",
+    },
+    selectedButtonText: {
+        padding: 5,
+        fontWeight: "400",
+        fontSize: 16,
+        color: "white",
+        textAlign: "center",
+    },
+    content: {
+        padding: 10,
+    },
 });

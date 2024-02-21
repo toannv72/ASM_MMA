@@ -7,6 +7,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Entypo } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button } from 'react-native-paper';
+import gioHang from '../../assets/gioHang.png';
 
 export default function ProfileSettingScreen({ navigation }) {
   const [checkedList, setCheckedList] = useState([]);
@@ -153,13 +154,18 @@ export default function ProfileSettingScreen({ navigation }) {
       <View style={{ marginTop: 20 }}>
         {ShowSelect || <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center', backgroundColor: '#fff', padding: 10, margin: 10 }}>
           <Text style={{ fontSize: 20 }}>Danh sách yêu thích</Text>
-          <Text style={{ fontSize: 20 }} onPress={() => setShowSelect(true)}>Sửa</Text>
+          {storedData.length != 0 ? <Text style={{ fontSize: 20 }} onPress={() => setShowSelect(true)}>Sửa</Text> : <></>}
         </View>}
         {!ShowSelect ||
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center' }}>
             <CheckBox
+              style={{ backgroundColor: '#78b2a2' }}
               title={!checkAll ? "Chọn tất cả " : "Bỏ chọn tất cả"}
               checked={checkAll}
+              size={30}
+              iconType="material-community"
+              checkedIcon="checkbox-outline"
+              uncheckedIcon={'checkbox-blank-outline'}
               onPress={onCheckAllPress}
             />
             {checkedList.length !== 0 ? <Button onPress={handleDeleteSelectedItems} style={{ backgroundColor: 'red', borderRadius: 10, margin: 9, justifyContent: 'space-between', alignContent: 'center', color: '#000' }}>
@@ -173,9 +179,26 @@ export default function ProfileSettingScreen({ navigation }) {
 
         <ScrollView >
           <View style={{ flexDirection: 'column-reverse', rowGap: 10, padding: 14 }}>
+            {storedData.length == 0 ? <View>
+
+              <View>
+                <Image
+                  style={{ width: "100%", height: 400 }}
+                  source={gioHang}
+                />
+                <Text style={{ color: '#fff', fontSize: 20, padding: 30, textAlign: 'center' }}>
+                  Danh sách yêu thích trống!
+                </Text>
+              </View>
+
+            </View> : <></>}
             {storedData.map((data, index) => (
               <View style={{ padding: 0, flexDirection: 'row', }} key={index}>
                 {!ShowSelect || <CheckBox
+                  size={30}
+                  iconType="material-community"
+                  checkedIcon="checkbox-outline"
+                  uncheckedIcon={'checkbox-blank-outline'}
                   style={{ padding: 0, margin: 0 }}
                   key={`checkbox_${data.id}`}
                   checked={checkedList.includes(data.id)}
@@ -240,5 +263,8 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
-  }
+  },
+  checkbox: {
+    backgroundColor: '#78b2a2', // Sử dụng màu nền mong muốn
+  },
 });

@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { StyleSheet, View, ScrollView, Image, Text } from 'react-native';
-import { CheckBox } from 'react-native-elements';
+import { CheckBox, Dialog } from 'react-native-elements';
 import { useFocusEffect } from '@react-navigation/native';
 import { getData } from '../api/api';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -15,6 +15,10 @@ export default function ProfileSettingScreen({ navigation }) {
   const [storedData, setStoredData] = useState([]);
   const [ShowSelect, setShowSelect] = useState(false);
   const [pressed, setPressed] = useState(false);
+  const [visible1, setVisible1] = useState(false);
+  const toggleDialog1 = () => {
+    setVisible1(!visible1);
+  };
   let pressTimer;
   const checkAll = storedData.length === checkedList.length;
   console.log(checkedList);
@@ -168,7 +172,7 @@ export default function ProfileSettingScreen({ navigation }) {
               uncheckedIcon={'checkbox-blank-outline'}
               onPress={onCheckAllPress}
             />
-            {checkedList.length !== 0 ? <Button onPress={handleDeleteSelectedItems} style={{ backgroundColor: 'red', borderRadius: 10, margin: 9, justifyContent: 'space-between', alignContent: 'center', color: '#000' }}>
+            {checkedList.length !== 0 ? <Button onPress={toggleDialog1} style={{ backgroundColor: 'red', borderRadius: 10, margin: 9, justifyContent: 'space-between', alignContent: 'center', color: '#000' }}>
               <Text style={{ color: '#fff', marginTop: 5 }}>Xóa {checkedList.length}</Text>
             </Button> : <></>}
             <Button onPress={() => setShowSelect(false)} style={{ backgroundColor: '#057594', margin: 9, borderRadius: 10, color: '#000' }}>
@@ -180,7 +184,6 @@ export default function ProfileSettingScreen({ navigation }) {
         <ScrollView >
           <View style={{ flexDirection: 'column-reverse', rowGap: 10, padding: 14 }}>
             {storedData.length == 0 ? <View>
-
               <View>
                 <Image
                   style={{ width: "100%", height: 400 }}
@@ -230,6 +233,20 @@ export default function ProfileSettingScreen({ navigation }) {
           <View style={{ height: 170 }}></View>
         </ScrollView>
 
+        <Dialog
+          isVisible={visible1}
+          onBackdropPress={toggleDialog1}
+        >
+          <Dialog.Title title="Xác nhận xóa " />
+          <Text>Bạn có chắc muốn xóa những sản phẩm đã chọn</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Button onPress={()=>{
+            handleDeleteSelectedItems(),
+            toggleDialog1()
+            }}  style={{ backgroundColor: 'red', margin: 9, borderRadius: 10, color: '#000' }}><Text style={{ color: '#fff' }}>Xác nhận</Text></Button>
+            <Button onPress={toggleDialog1} style={{ backgroundColor: '#057594', margin: 9, borderRadius: 10, color: '#000' }}><Text style={{ color: '#fff' }}>Hủy</Text></Button>
+          </View>
+        </Dialog>
       </View>
     </View>
   );

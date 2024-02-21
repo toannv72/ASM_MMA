@@ -63,7 +63,7 @@ export default function HomeScreen({ navigation }) {
                     })
                 return;
             case "B":
-                getData('/orchids?category=Quý Hiếm')
+                getData('/orchids?category=Địa lan')
                     .then((data) => {
                         setData(data.data);
                         loadStoredData(data.data);
@@ -73,7 +73,17 @@ export default function HomeScreen({ navigation }) {
                     })
                 return;
             case "C":
-                getData('/orchids?category=lâu năm')
+                getData('/orchids?category=Phong lan')
+                    .then((data) => {
+                        setData(data.data);
+                        loadStoredData(data.data);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
+                return;
+            case "D":
+                getData('/orchids?category=Bán địa lan')
                     .then((data) => {
                         setData(data.data);
                         loadStoredData(data.data);
@@ -153,13 +163,19 @@ export default function HomeScreen({ navigation }) {
                             style={getButtonStyle("B")}
                             onPress={() => setCurrentPage("B")}
                         >
-                            <Text style={getTextStyle("B")}>Quý hiếm</Text>
+                            <Text style={getTextStyle("B")}>Địa lan</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={getButtonStyle("C")}
                             onPress={() => setCurrentPage("C")}
                         >
-                            <Text style={getTextStyle("C")}>Lâu năm</Text>
+                            <Text style={getTextStyle("C")}>Phong lan</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={getButtonStyle("D")}
+                            onPress={() => setCurrentPage("D")}
+                        >
+                            <Text style={getTextStyle("D")}>Bán địa lan</Text>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
@@ -174,7 +190,7 @@ export default function HomeScreen({ navigation }) {
                                 source={gioHang}
                             />
                             <Text style={{ color: '#fff', fontSize: 20, padding: 30, textAlign: 'center' }}>
-                               
+
                             </Text>
                         </View>
 

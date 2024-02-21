@@ -8,6 +8,8 @@ import { getData } from '../api/api';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
 import { Entypo } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import notF from '../../assets/notF.png';
+
 export default function Detail({ navigation }) {
     const [data, setData] = useState({});
     const [likedProducts, setLikedProducts] = useState(null);
@@ -40,7 +42,7 @@ export default function Detail({ navigation }) {
                     loadStoredData(data.data);
                 })
                 .catch((error) => {
-                    console.log(error);
+                    setData({})
                 })
 
             return () => {
@@ -48,7 +50,7 @@ export default function Detail({ navigation }) {
         }, []),
 
     );
-
+console.log(data);
     const handleLike = (index, product) => {
 
         setLikedProducts(!likedProducts);
@@ -56,11 +58,8 @@ export default function Detail({ navigation }) {
         const isLiked = storedData.some(item => item.id === product.id);
         // Nếu chưa tồn tại, thì thêm vào mảng storedData
         if (!isLiked) {
-
-            console.log(111111111222111, storedData);
             const updatedStoredData = [...storedData, product];
             AsyncStorage.setItem('@Like', JSON.stringify(updatedStoredData));
-
             return
         }
         return
@@ -76,37 +75,48 @@ export default function Detail({ navigation }) {
     };
     return (
         <View style={styles.container} >
-
-            <ScrollView >
-                <View style={{ flexDirection: 'column-reverse', rowGap: 10, padding: 14 }}>
-
-                    <View style={styles.origin}>
-                        <Image source={{ uri: data.image }} style={styles.image} />
-                    </View>
+            {data.id == null ?
+                <View>
+                    <Image
+                        style={{ width: "100%", height: 400 }}
+                        source={notF}
+                    />
+                    <Text style={{ color: '#fff', fontSize: 20, padding: 30, textAlign: 'center' }}>
+                        Không Tìm Thấy Sản Phẩm
+                    </Text>
                 </View>
-                <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                    <View style={{ ...styles.origin, rowGap: 10, padding: 14, width: '95%', }}>
-                        <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">{data.name}</Text>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <View >
-                                <Text style={{ fontSize: 20,fontWeight: 'bold', }}>{`Xuất xứ : ${data.origin}`}</Text>
-                                <Text style={{ fontSize: 20,fontWeight: 'bold', }}>{`Thể loại: ${data.category}`}</Text>
-                            </View>
-                            <View >
-                                {likedProducts ? <Entypo onPress={() => handleUnlike("index", data)} name="heart" size={40} color="red" /> : <Entypo onPress={() => handleLike("index", data)} name="heart-outlined" size={40} color="#555555" />}
-                            </View>
-                        </View>
-                        <View>
-                            <Divider width={2} inset={true} insetType="middle" />
-                            <Text style={{ fontSize: 22 ,fontWeight: 'bold',}}>Chi tiết:</Text>
-                            <Text style={{ fontSize: 20 }}>
+                :
+                <ScrollView >
+                    <View style={{ flexDirection: 'column-reverse', rowGap: 10, padding: 14 }}>
 
-                                {data.detail}</Text>
+                        <View style={styles.origin}>
+                            <Image source={{ uri: data.image }} style={styles.image} />
                         </View>
                     </View>
-                </View>
-                <View style={{ height: 120 }}></View>
-            </ScrollView>
+                    <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                        <View style={{ ...styles.origin, rowGap: 10, padding: 14, width: '95%', }}>
+                            <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">{data.name}</Text>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <View >
+                                    <Text style={{ fontSize: 20, fontWeight: 'bold', }}>{`Xuất xứ : ${data.origin}`}</Text>
+                                    <Text style={{ fontSize: 20, fontWeight: 'bold', }}>{`Thể loại: ${data.category}`}</Text>
+                                </View>
+                                <View >
+                                    {likedProducts ? <Entypo onPress={() => handleUnlike("index", data)} name="heart" size={40} color="red" /> : <Entypo onPress={() => handleLike("index", data)} name="heart-outlined" size={40} color="#555555" />}
+                                </View>
+                            </View>
+                            <View>
+                                <Divider width={2} inset={true} insetType="middle" />
+                                <Text style={{ fontSize: 22, fontWeight: 'bold', }}>Chi tiết:</Text>
+                                <Text style={{ fontSize: 20 }}>
+
+                                    {data.detail}</Text>
+                            </View>
+                        </View>
+                    </View>
+                    <View style={{ height: 120 }}></View>
+                </ScrollView>}
+
         </View>
     );
 }

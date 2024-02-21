@@ -1,9 +1,5 @@
-import { StyleSheet, View, Text, ScrollView, Image } from 'react-native';
-import { Button, ProgressBar, Searchbar } from 'react-native-paper';
-
+import { StyleSheet, View, Text, ScrollView, Image, Keyboard } from 'react-native';
 import { useCallback, useEffect, useState } from 'react';
-import { Card } from '@rneui/themed';
-import PetProfile from './PetProfile';
 import { getData } from '../api/api';
 import { useFocusEffect } from '@react-navigation/native';
 import { Entypo } from '@expo/vector-icons';
@@ -80,16 +76,26 @@ export default function HomeScreen({ navigation }) {
         return
 
     };
+    const handleSearchbarFocus = () => {
+      
+        navigation.navigate("Search", { itemData: 1 });
+    };
+
     return (
         <View style={styles.container} >
-
+            <TouchableOpacity
+                style={{ marginTop: 30, marginBottom:10,marginLeft:20,marginRight:20, padding: 15, borderWidth: 2, borderColor: 'gray', borderRadius: 15 ,backgroundColor:"white"}}
+                onPress={handleSearchbarFocus}
+            >
+                <Text>Search</Text>
+            </TouchableOpacity>
             <ScrollView >
                 <View style={{ flexDirection: 'column-reverse', rowGap: 10, padding: 14 }}>
                     {data.map((data, index) => (
-                        <View style={{ padding: 10 }}  key={index}>
+                        <View style={{ padding: 10 }} key={index}>
                             <TouchableOpacity
                                 style={styles.origin}
-                               
+
                                 onPress={() => {
                                     navigation.navigate("Detail", { itemData: data.id });
                                 }}

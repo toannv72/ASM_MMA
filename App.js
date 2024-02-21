@@ -8,6 +8,7 @@ import { StyleSheet } from "react-native";
 import ProfileSettingScreen from "./src/page/Profile";
 import Notification from "./src/page/Notification";
 import Detail from "./src/page/Detail";
+import Search from "./src/page/Search";
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -23,6 +24,11 @@ const App = () => {
         <Stack.Screen
           name="Detail"
           component={Detail}
+        />
+          <Stack.Screen
+          options={{ headerLeft: null, headerShown: false }}
+          name="Search"
+          component={Search}
         />
       </Stack.Navigator>
     </NavigationContainer>

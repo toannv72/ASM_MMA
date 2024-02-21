@@ -39,25 +39,49 @@ export default function ProfileSettingScreen({ navigation }) {
     try {
       const dataAsyncStorage = await AsyncStorage.getItem('@Like');
       if (dataAsyncStorage !== null) {
-        setStoredData(JSON.parse(dataAsyncStorage));
-
-        const resultArray = JSON.parse(dataAsyncStorage).map((element) => {
-          const elementString = JSON.stringify(element);
-          return JSON.parse(dataAsyncStorage).some((item) => JSON.stringify(item) === elementString);
-        });
-        setLikedProducts(resultArray)
+        const storedData = JSON.parse(dataAsyncStorage);
+        console.log('storedData', storedData);
+        setLikedProducts(storedData);
+        fetchDataForLikedProducts(storedData)
       } else {
-        setStoredData([]);
+        setLikedProducts([]);
+        fetchDataForLikedProducts(null)
       }
     } catch (error) {
       console.error('Error loading data:', error);
     }
   };
 
+  const fetchDataForLikedProducts = async (storedData) => {
+
+    const productDataArray = [];
+    for (const product of storedData) {
+      try {
+        const response = await fetch(`http://192.168.56.1:3000/orchids/${product.id}`);
+        if (!response.ok) {
+          // Xử lý trường hợp khi không tìm thấy sản phẩm (ví dụ: mã trạng thái 404)
+          if (response.status === 404) {
+            console.log(`Không tìm thấy sản phẩm với id ${product.id}`);
+          } else {
+            throw new Error(`Lỗi khi lấy dữ liệu sản phẩm: ${response.statusText}`);
+          }
+        } else {
+          const productData = await response.json();
+          productDataArray.push(productData);
+        }
+      } catch (error) {
+        console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
+      }
+    }
+    console.log('Product data array:', productDataArray);
+    setStoredData(productDataArray)
+  };
+
   useFocusEffect(
     useCallback(() => {
       setCheckedList([])
       loadStoredData();
+
       setShowSelect(false);
       return () => {
       };
@@ -120,13 +144,17 @@ export default function ProfileSettingScreen({ navigation }) {
     setStoredData(updatedStoredData);
     // Đặt lại checkedList về mảng trống
     setCheckedList([]);
+    setShowSelect(false);
     // Lưu trạng thái mới của storedData vào AsyncStorage
     AsyncStorage.setItem('@Like', JSON.stringify(updatedStoredData));
   };
   return (
     <View style={styles.container} >
       <View style={{ marginTop: 20 }}>
-
+        {ShowSelect || <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center', backgroundColor: '#fff', padding: 10, margin: 10 }}>
+          <Text style={{ fontSize: 20 }}>Danh sách yêu thích</Text>
+          <Text style={{ fontSize: 20 }} onPress={() => setShowSelect(true)}>Sửa</Text>
+        </View>}
         {!ShowSelect ||
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center' }}>
             <CheckBox
@@ -134,11 +162,11 @@ export default function ProfileSettingScreen({ navigation }) {
               checked={checkAll}
               onPress={onCheckAllPress}
             />
-            {checkedList.length !== 0 ? <Button onPress={handleDeleteSelectedItems}  style={{ backgroundColor: 'red', borderRadius: 10, margin: 5, justifyContent: 'space-between', alignContent: 'center', color: '#000' }}>
-              <Text style={{ color: '#fff',marginTop:5 }}>Xóa {checkedList.length}</Text>
+            {checkedList.length !== 0 ? <Button onPress={handleDeleteSelectedItems} style={{ backgroundColor: 'red', borderRadius: 10, margin: 9, justifyContent: 'space-between', alignContent: 'center', color: '#000' }}>
+              <Text style={{ color: '#fff', marginTop: 5 }}>Xóa {checkedList.length}</Text>
             </Button> : <></>}
-            <Button onPress={() => setShowSelect(false)} style={{ backgroundColor: '#057594', borderRadius: 10, margin: 5, justifyContent: 'space-between', alignContent: 'center', color: '#000' }}>
-              <Text style={{ color: '#fff',marginTop:5 }}>Hủy</Text>
+            <Button onPress={() => setShowSelect(false)} style={{ backgroundColor: '#057594', margin: 9, borderRadius: 10, color: '#000' }}>
+              <Text style={{ color: '#fff', padding: 0, }}>Hủy</Text>
             </Button>
           </View>
         }
@@ -172,7 +200,7 @@ export default function ProfileSettingScreen({ navigation }) {
                     </View>
                   </View>
                 </TouchableOpacity>
-      
+
               </View>
             ))}
           </View>

@@ -2,7 +2,7 @@ import { StyleSheet, View, Text, ScrollView, Image } from 'react-native';
 import { Button, ProgressBar, Searchbar } from 'react-native-paper';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Card } from '@rneui/themed';
+import { Card, Divider } from '@rneui/themed';
 import PetProfile from './PetProfile';
 import { getData } from '../api/api';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
@@ -82,20 +82,28 @@ export default function Detail({ navigation }) {
 
                     <View style={styles.origin}>
                         <Image source={{ uri: data.image }} style={styles.image} />
-                        <View style={{ padding: 10 }}>
-                            <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">{data.name}</Text>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <View >
-                                    <Text>{`Xuất xứ : ${data.origin}`}</Text>
-                                    <Text>{`Thể loại: ${data.category}`}</Text>
-                                </View>
-                                <View >
-                                    {likedProducts ? <Entypo onPress={() => handleUnlike("index", data)} name="heart" size={40} color="red" /> : <Entypo onPress={() => handleLike("index", data)} name="heart-outlined" size={40} color="#555555" />}
-                                </View>
+                    </View>
+                </View>
+                <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={{ ...styles.origin, rowGap: 10, padding: 14, width: '95%', }}>
+                        <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">{data.name}</Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <View >
+                                <Text style={{ fontSize: 20,fontWeight: 'bold', }}>{`Xuất xứ : ${data.origin}`}</Text>
+                                <Text style={{ fontSize: 20,fontWeight: 'bold', }}>{`Thể loại: ${data.category}`}</Text>
+                            </View>
+                            <View >
+                                {likedProducts ? <Entypo onPress={() => handleUnlike("index", data)} name="heart" size={40} color="red" /> : <Entypo onPress={() => handleLike("index", data)} name="heart-outlined" size={40} color="#555555" />}
                             </View>
                         </View>
-                    </View>
+                        <View>
+                            <Divider width={2} inset={true} insetType="middle" />
+                            <Text style={{ fontSize: 22 ,fontWeight: 'bold',}}>Chi tiết:</Text>
+                            <Text style={{ fontSize: 20 }}>
 
+                                {data.detail}</Text>
+                        </View>
+                    </View>
                 </View>
                 <View style={{ height: 120 }}></View>
             </ScrollView>
@@ -113,11 +121,11 @@ const styles = StyleSheet.create({
     image: {
         width: '100%',
         height: 200,
-        borderTopLeftRadius: 20,
+        borderRadius: 20,
         borderTopRightRadius: 20,
     },
     title: {
-        fontSize: 18,
+        fontSize: 25,
         fontWeight: 'bold',
         marginVertical: 5,
 

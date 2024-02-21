@@ -21,7 +21,8 @@ export default function HomeScreen({ navigation }) {
                 setStoredData(JSON.parse(dataAsyncStorage));
                 const resultArray = data.map((element) => {
                     const elementString = JSON.stringify(element);
-                    return JSON.parse(dataAsyncStorage).some((item) => JSON.stringify(item) === elementString);
+                    console.log(element);
+                    return JSON.parse(dataAsyncStorage).some((item) => item.id === element.id);
                 });
                 setLikedProducts(resultArray)
             } else {

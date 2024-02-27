@@ -81,11 +81,11 @@ function MyBottomNavigationBar() {
         options={{ headerShown: false }}
         component={ProfileSettingScreen}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Profile"
         options={{ headerShown: false }}
         component={ProfileSettingScreen}
-      />
+      /> */}
     </Tab.Navigator>
   );
 }

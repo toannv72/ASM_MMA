@@ -44,7 +44,10 @@ export default function Search({ }) {
         }, 10);
     }, []);
     const handleGoBack = () => {
-        navigation.goBack(); // Điều này sẽ quay lại màn hình trước đó trong Stack Navigator
+        Keyboard.dismiss()
+        setTimeout(() => {
+            navigation.goBack(); // Điều này sẽ quay lại màn hình trước đó trong Stack Navigator
+        }, 100);
     };
     const handleSearch = () => {
         if (!search) {

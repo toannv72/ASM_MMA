@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, ScrollView, Image, Keyboard } from 'react-native';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { getData } from '../api/api';
 import { useFocusEffect } from '@react-navigation/native';
 import { Entypo } from '@expo/vector-icons';
@@ -13,7 +13,11 @@ export default function HomeScreen({ navigation }) {
     const [likedProducts, setLikedProducts] = useState([]);
     const [currentPage, setCurrentPage] = useState("A");
     const [storedData, setStoredData] = useState([]);
+    const scrollViewRef = useRef();
 
+    const scrollToTop = () => {
+        scrollViewRef.current.scrollTo({ y: 0, animated: true });
+    };
     const loadStoredData = async (data) => {
         try {
             const dataAsyncStorage = await AsyncStorage.getItem('@Like');
@@ -51,6 +55,7 @@ export default function HomeScreen({ navigation }) {
 
     );
     const renderContent = () => {
+        scrollToTop()
         switch (currentPage) {
             case "A":
                 getData('/orchids')
@@ -151,7 +156,7 @@ export default function HomeScreen({ navigation }) {
                 <Text>Search</Text>
             </TouchableOpacity>
             <SafeAreaView>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} >
                     <View style={styles.tab}>
                         <TouchableOpacity
                             style={getButtonStyle("A")}
@@ -179,8 +184,10 @@ export default function HomeScreen({ navigation }) {
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
+
+                
             </SafeAreaView>
-            <ScrollView >
+            <ScrollView ref={scrollViewRef}>
                 <View style={{ flexDirection: 'column-reverse', rowGap: 10, padding: 14 }}>
                     {data.length == 0 ? <View>
 

@@ -21,7 +21,7 @@ export default function ProfileSettingScreen({ navigation }) {
   };
   let pressTimer;
   const checkAll = storedData.length === checkedList.length;
-  console.log(checkedList);
+ 
   const onCheckboxPress = (value) => {
     const updatedCheckedList = [...checkedList];
     const index = updatedCheckedList.indexOf(value);

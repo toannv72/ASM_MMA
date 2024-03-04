@@ -50,7 +50,6 @@ export default function Detail({ navigation }) {
         }, []),
 
     );
-console.log(data);
     const handleLike = (index, product) => {
 
         setLikedProducts(!likedProducts);

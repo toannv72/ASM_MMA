@@ -162,6 +162,14 @@ export default function ProfileSettingScreen({ navigation }) {
         </View>}
         {!ShowSelect ||
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center' }}>
+            
+           
+            <Button onPress={() => setShowSelect(false)} style={{ backgroundColor: '#057594', margin: 9, borderRadius: 10, color: '#000' }}>
+              <Text style={{ color: '#fff', padding: 0, }}>Hủy</Text>
+            </Button>
+            {checkedList.length !== 0 ? <Button onPress={toggleDialog1} style={{ backgroundColor: 'red', borderRadius: 10, margin: 9, justifyContent: 'space-between', alignContent: 'center', color: '#000' }}>
+              <Text style={{ color: '#fff', marginTop: 5 }}>Xóa</Text>
+            </Button> : <></>}
             <CheckBox
               style={{ backgroundColor: '#78b2a2' }}
               title={!checkAll ? "Chọn tất cả " : "Bỏ chọn tất cả"}
@@ -172,12 +180,6 @@ export default function ProfileSettingScreen({ navigation }) {
               uncheckedIcon={'checkbox-blank-outline'}
               onPress={onCheckAllPress}
             />
-            {checkedList.length !== 0 ? <Button onPress={toggleDialog1} style={{ backgroundColor: 'red', borderRadius: 10, margin: 9, justifyContent: 'space-between', alignContent: 'center', color: '#000' }}>
-              <Text style={{ color: '#fff', marginTop: 5 }}>Xóa {checkedList.length}</Text>
-            </Button> : <></>}
-            <Button onPress={() => setShowSelect(false)} style={{ backgroundColor: '#057594', margin: 9, borderRadius: 10, color: '#000' }}>
-              <Text style={{ color: '#fff', padding: 0, }}>Hủy</Text>
-            </Button>
           </View>
         }
 
@@ -185,11 +187,7 @@ export default function ProfileSettingScreen({ navigation }) {
           <View style={{ flexDirection: 'column-reverse', rowGap: 10, padding: 14 }}>
             {storedData.length == 0 ? <View>
               <View>
-                <Image
-                  style={{ width: "100%", height: 400 }}
-                  source={gioHang}
-                />
-                <Text style={{ color: '#fff', fontSize: 20, padding: 30, textAlign: 'center' }}>
+                <Text style={{  fontSize: 20, padding: 30, textAlign: 'center' }}>
                   Danh sách yêu thích trống!
                 </Text>
               </View>
@@ -197,16 +195,7 @@ export default function ProfileSettingScreen({ navigation }) {
             </View> : <></>}
             {storedData.map((data, index) => (
               <View style={{ padding: 0, flexDirection: 'row', }} key={index}>
-                {!ShowSelect || <CheckBox
-                  size={30}
-                  iconType="material-community"
-                  checkedIcon="checkbox-outline"
-                  uncheckedIcon={'checkbox-blank-outline'}
-                  style={{ padding: 0, margin: 0 }}
-                  key={`checkbox_${data.id}`}
-                  checked={checkedList.includes(data.id)}
-                  onPress={() => onCheckboxPress(data.id)}
-                />}
+               
                 <TouchableOpacity
                   style={styles.origin}
                   key={data.id}
@@ -226,7 +215,16 @@ export default function ProfileSettingScreen({ navigation }) {
                     </View>
                   </View>
                 </TouchableOpacity>
-
+                {!ShowSelect || <CheckBox
+                  size={30}
+                  iconType="material-community"
+                  checkedIcon="checkbox-outline"
+                  uncheckedIcon={'checkbox-blank-outline'}
+                  style={{ padding: 0, margin: 0 }}
+                  key={`checkbox_${data.id}`}
+                  checked={checkedList.includes(data.id)}
+                  onPress={() => onCheckboxPress(data.id)}
+                />}
               </View>
             ))}
           </View>
@@ -256,7 +254,7 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: "#78b2a2",
+    // backgroundColor: "#78b2a2",
   },
   image: {
     width: 100,

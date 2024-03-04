@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, ScrollView, Image } from 'react-native';
-import { Button, ProgressBar, Searchbar } from 'react-native-paper';
+import { Button, IconButton, ProgressBar, Searchbar } from 'react-native-paper';
 
 import { useCallback, useEffect, useState } from 'react';
 import { Card, Divider } from '@rneui/themed';
@@ -72,20 +72,25 @@ export default function Detail({ navigation }) {
         AsyncStorage.setItem('@Like', JSON.stringify(updatedStoredData));
         return
     };
+    const handleGoBack = () => {
+
+        setTimeout(() => {
+            navigation.goBack(); // Điều này sẽ quay lại màn hình trước đó trong Stack Navigator
+        }, 100);
+    };
     return (
         <View style={styles.container} >
-            {data.id == null ?
-                <View>
-                    <Image
-                        style={{ width: "100%", height: 400 }}
-                        source={notF}
-                    />
-                    <Text style={{ color: '#fff', fontSize: 20, padding: 30, textAlign: 'center' }}>
-                        Không Tìm Thấy Sản Phẩm
-                    </Text>
-                </View>
-                :
+             <View style={{ flexDirection: 'row', alignItems: "center", marginTop: 20 }}>
+                        <IconButton
+                            icon="arrow-left-thick"
+                            iconColor={"#000"}
+                            size={30}
+                            onPress={() => handleGoBack()}
+                        />
+                        <Text onPress={() => handleGoBack()} style={{ fontSize: 20, fontWeight: 'bold', }}> Quay Lại</Text>
+                    </View>
                 <ScrollView >
+                 
                     <View style={{ flexDirection: 'column-reverse', rowGap: 10, padding: 14 }}>
 
                         <View style={styles.origin}>
@@ -100,12 +105,10 @@ export default function Detail({ navigation }) {
                                     <Text style={{ fontSize: 20, fontWeight: 'bold', }}>{`Xuất xứ : ${data.origin}`}</Text>
                                     <Text style={{ fontSize: 20, fontWeight: 'bold', }}>{`Thể loại: ${data.category}`}</Text>
                                 </View>
-                                <View >
-                                    {likedProducts ? <Entypo onPress={() => handleUnlike("index", data)} name="heart" size={40} color="red" /> : <Entypo onPress={() => handleLike("index", data)} name="heart-outlined" size={40} color="#555555" />}
-                                </View>
+
                             </View>
                             <View>
-                                <Divider width={2} inset={true} insetType="middle" />
+                                {/* <Divider width={2} inset={true} insetType="middle" /> */}
                                 <Text style={{ fontSize: 22, fontWeight: 'bold', }}>Chi tiết:</Text>
                                 <Text style={{ fontSize: 20 }}>
 
@@ -114,8 +117,12 @@ export default function Detail({ navigation }) {
                         </View>
                     </View>
                     <View style={{ height: 120 }}></View>
-                </ScrollView>}
+                </ScrollView>
+            <View  style={{ backgroundColor: 'blue', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', height: 80 }}>
+             
+                    {likedProducts ? <Entypo onPress={() => handleUnlike("index", data)} name="heart" size={40} color="red" /> : <Entypo onPress={() => handleLike("index", data)} name="heart-outlined" size={40} color="#555555" />}
 
+            </View>
         </View>
     );
 }
@@ -125,7 +132,7 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: "#78b2a2",
+        // backgroundColor: "#78b2a2",
     },
     image: {
         width: '100%',

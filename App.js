@@ -22,6 +22,7 @@ const App = () => {
           component={MyBottomNavigationBar}
         />
         <Stack.Screen
+          options={{ headerLeft: null, headerShown: false }}
           name="Detail"
           component={Detail}
         />
@@ -43,9 +44,6 @@ function MyBottomNavigationBar() {
         tabBarShowLabel: false,
         tabBarStyle: {
           position: 'absolute',
-          bottom: 25,
-          left: 20,
-          right: 20,
           elevation: 0,
           backgroundColor: '#fff',
           borderRadius: 15,

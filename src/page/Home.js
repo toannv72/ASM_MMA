@@ -68,7 +68,7 @@ export default function HomeScreen({ navigation }) {
                     })
                 return;
             case "B":
-                getData('/orchids?category=Địa lan')
+                getData('/orchids?category=Lan cảnh')
                     .then((data) => {
                         setData(data.data);
                         loadStoredData(data.data);
@@ -78,7 +78,7 @@ export default function HomeScreen({ navigation }) {
                     })
                 return;
             case "C":
-                getData('/orchids?category=Phong lan')
+                getData('/orchids?category=Lan tự nhiên')
                     .then((data) => {
                         setData(data.data);
                         loadStoredData(data.data);
@@ -88,7 +88,7 @@ export default function HomeScreen({ navigation }) {
                     })
                 return;
             case "D":
-                getData('/orchids?category=Bán địa lan')
+                getData('/orchids?category=Lan trồng')
                     .then((data) => {
                         setData(data.data);
                         loadStoredData(data.data);
@@ -149,13 +149,13 @@ export default function HomeScreen({ navigation }) {
 
     return (
         <View style={styles.container} >
-            <TouchableOpacity
+            {/* <TouchableOpacity
                 style={{ marginTop: 30, marginLeft: 20, marginRight: 20, padding: 15, borderWidth: 2, borderColor: 'gray', borderRadius: 15, backgroundColor: "white" }}
                 onPress={handleSearchbarFocus}
             >
                 <Text>Search</Text>
-            </TouchableOpacity>
-            <SafeAreaView>
+            </TouchableOpacity> */}
+            <SafeAreaView style={{ marginTop: 30, }}>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} >
                     <View style={styles.tab}>
                         <TouchableOpacity
@@ -168,24 +168,24 @@ export default function HomeScreen({ navigation }) {
                             style={getButtonStyle("B")}
                             onPress={() => setCurrentPage("B")}
                         >
-                            <Text style={getTextStyle("B")}>Địa lan</Text>
+                            <Text style={getTextStyle("B")}>Lan cảnh</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={getButtonStyle("C")}
                             onPress={() => setCurrentPage("C")}
                         >
-                            <Text style={getTextStyle("C")}>Phong lan</Text>
+                            <Text style={getTextStyle("C")}>Lan tự nhiên</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={getButtonStyle("D")}
                             onPress={() => setCurrentPage("D")}
                         >
-                            <Text style={getTextStyle("D")}>Bán địa lan</Text>
+                            <Text style={getTextStyle("D")}>Lan trồng</Text>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
 
-                
+
             </SafeAreaView>
             <ScrollView ref={scrollViewRef}>
                 <View style={{ flexDirection: 'column-reverse', rowGap: 10, padding: 14 }}>
@@ -196,37 +196,38 @@ export default function HomeScreen({ navigation }) {
                                 style={{ width: "100%", height: 400 }}
                                 source={gioHang}
                             />
-                            <Text style={{ color: '#fff', fontSize: 20, padding: 30, textAlign: 'center' }}>
+                            <Text style={{ fontSize: 20, padding: 30, textAlign: 'center' }}>
 
                             </Text>
                         </View>
 
                     </View> : <></>}
-                    {data.map((data, index) => (
-                        <View style={{ padding: 10 }} key={index}>
-                            <TouchableOpacity
-                                style={styles.origin}
-
-                                onPress={() => {
-                                    navigation.navigate("Detail", { itemData: data.id });
-                                }}
-                            >
-                                <Image source={{ uri: data.image }} style={styles.image} />
-                                <View style={{ padding: 10 }} >
-                                    <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">{data.name}</Text>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <View>
-                                            <Text>{`Xuất xứ : ${data.origin}`}</Text>
-                                            <Text>{`Thể loại: ${data.category}`}</Text>
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                        {data.map((item, index) => (
+                            <View style={{ width: '50%', padding: 7 }} key={index}>
+                                <TouchableOpacity
+                                    style={styles.origin}
+                                    onPress={() => {
+                                        navigation.navigate("Detail", { itemData: item.id });
+                                    }}
+                                >
+                                    <Image source={{ uri: item.image }} style={styles.image} />
+                                    <View style={{ padding: 10 }} >
+                                        <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">{item.name}</Text>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                            <View>
+                                                <Text>{`Xuất xứ : ${item.origin}`}</Text>
+                                                <Text>{`Thể loại: ${item.category}`}</Text>
+                                            </View>
                                         </View>
                                     </View>
+                                </TouchableOpacity>
+                                <View style={{ marginTop: -50, marginRight: 1, flexDirection: 'row', justifyContent: 'flex-end', }}>
+                                    {likedProducts[index] ? <Entypo style={{ padding: 1 }} pointerEvents="none" onPress={() => handleUnlike(index, item)} name="heart" size={40} color="red" /> : <Entypo style={{ padding: 1 }} pointerEvents="none" onPress={() => handleLike(index, item)} name="heart-outlined" size={40} color="#555555" />}
                                 </View>
-                            </TouchableOpacity>
-                            <View style={{ marginTop: -50, marginRight: 10, flexDirection: 'row', justifyContent: 'flex-end', }}>
-                                {likedProducts[index] ? <Entypo style={{ padding: 5 }} pointerEvents="none" onPress={() => handleUnlike(index, data)} name="heart" size={40} color="red" /> : <Entypo style={{ padding: 5 }} pointerEvents="none" onPress={() => handleLike(index, data)} name="heart-outlined" size={40} color="#555555" />}
                             </View>
-                        </View>
-                    ))}
+                        ))}
+                    </View>
                 </View>
                 <View style={{ height: 120 }}></View>
             </ScrollView>
@@ -239,7 +240,7 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: "#78b2a2",
+        // backgroundColor: "#78b2a2",
     },
     image: {
         width: '100%',

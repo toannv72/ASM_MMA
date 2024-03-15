@@ -37,6 +37,7 @@
     "json-server": "^1.0.0-alpha.23",
     "native-base": "^3.4.28",
     "react": "18.2.0",
+    "react-hook-form": "^7.51.0",
     "react-native": "0.72.6",
     "react-native-app-intro-slider": "^4.0.4",
     "react-native-dropdown-select-list": "^2.0.5",

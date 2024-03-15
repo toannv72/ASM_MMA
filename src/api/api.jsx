@@ -47,3 +47,12 @@ export const deleteData = async (endpoint, id, headers = {}) => {
     throw error;
   }
 };
+
+export const patchData = async (endpoint, id, data, headers = {}) => {
+  try {
+    const response = await api.patch(`${endpoint}/${id}`, data, { headers });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

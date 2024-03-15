@@ -4,11 +4,10 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import HomeScreen from "./src/page/Home";
-import { StyleSheet } from "react-native";
 import ProfileSettingScreen from "./src/page/Profile";
-import Notification from "./src/page/Notification";
 import Detail from "./src/page/Detail";
 import Search from "./src/page/Search";
+import HomeScreen2 from "./src/page/Home2";
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -81,11 +80,11 @@ function MyBottomNavigationBar() {
         options={{ headerShown: false }}
         component={ProfileSettingScreen}
       />
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Profile"
         options={{ headerShown: false }}
-        component={ProfileSettingScreen}
-      /> */}
+        component={HomeScreen2}
+      />
     </Tab.Navigator>
   );
 }

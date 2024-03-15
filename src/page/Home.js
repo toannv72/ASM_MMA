@@ -7,16 +7,21 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import gioHang from '../../assets/gioHang.png';
+import dataList from '../../db';
 
 export default function HomeScreen({ navigation }) {
     const [data, setData] = useState([]);
     const [likedProducts, setLikedProducts] = useState([]);
     const [currentPage, setCurrentPage] = useState("A");
     const [storedData, setStoredData] = useState([]);
+    // const [dataList, setStoredData] = useState([]);
     const scrollViewRef = useRef();
-
+    const scrollViewRef2 = useRef();
     const scrollToTop = () => {
         scrollViewRef.current.scrollTo({ y: 0, animated: true });
+    };
+    const scrollToTop2 = () => {
+        scrollViewRef2.current.scrollTo({ y: 0, animated: true });
     };
     const loadStoredData = async (data) => {
         try {
@@ -25,7 +30,7 @@ export default function HomeScreen({ navigation }) {
                 setStoredData(JSON.parse(dataAsyncStorage));
                 const resultArray = data.map((element) => {
                     const elementString = JSON.stringify(element);
-                    console.log(element);
+             
                     return JSON.parse(dataAsyncStorage).some((item) => item.id === element.id);
                 });
                 setLikedProducts(resultArray)
@@ -39,16 +44,14 @@ export default function HomeScreen({ navigation }) {
 
     useFocusEffect(
         useCallback(() => {
-            setCurrentPage("A")
-            getData('/orchids')
-                .then((data) => {
-                    setData(data.data);
-                    loadStoredData(data.data);
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
+            // scrollToTop2()
+            console.log(dataList);
 
+            scrollToTop()
+            setCurrentPage("A")
+            console.log(dataList);
+            setData(dataList);
+            loadStoredData(dataList);
             return () => {
             };
         }, []),
@@ -58,44 +61,21 @@ export default function HomeScreen({ navigation }) {
         scrollToTop()
         switch (currentPage) {
             case "A":
-                getData('/orchids')
-                    .then((data) => {
-                        setData(data.data);
-                        loadStoredData(data.data);
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    })
+                setData(dataList);
                 return;
             case "B":
-                getData('/orchids?category=Địa lan')
-                    .then((data) => {
-                        setData(data.data);
-                        loadStoredData(data.data);
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    })
+                const filteredList = dataList.filter(item => item.category === "Địa lan")
+                setData(filteredList);
+
                 return;
             case "C":
-                getData('/orchids?category=Phong lan')
-                    .then((data) => {
-                        setData(data.data);
-                        loadStoredData(data.data);
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    })
+
+                const filteredList2 = dataList.filter(item => item.category === "Phong lan")
+                setData(filteredList2);
                 return;
             case "D":
-                getData('/orchids?category=Bán địa lan')
-                    .then((data) => {
-                        setData(data.data);
-                        loadStoredData(data.data);
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    })
+                const filteredList3 = dataList.filter(item => item.category === "Bán địa lan")
+                setData(filteredList3);
                 return;
             default:
                 return;
@@ -156,7 +136,7 @@ export default function HomeScreen({ navigation }) {
                 <Text>Search</Text>
             </TouchableOpacity>
             <SafeAreaView>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} >
+                <ScrollView ref={scrollViewRef2} horizontal showsHorizontalScrollIndicator={false} >
                     <View style={styles.tab}>
                         <TouchableOpacity
                             style={getButtonStyle("A")}
@@ -185,7 +165,7 @@ export default function HomeScreen({ navigation }) {
                     </View>
                 </ScrollView>
 
-                
+
             </SafeAreaView>
             <ScrollView ref={scrollViewRef}>
                 <View style={{ flexDirection: 'column-reverse', rowGap: 10, padding: 14 }}>

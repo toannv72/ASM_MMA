@@ -8,6 +8,7 @@ import { Entypo } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button } from 'react-native-paper';
 import gioHang from '../../assets/gioHang.png';
+import dataList from '../../db';
 
 export default function ProfileSettingScreen({ navigation }) {
   const [checkedList, setCheckedList] = useState([]);
@@ -21,7 +22,7 @@ export default function ProfileSettingScreen({ navigation }) {
   };
   let pressTimer;
   const checkAll = storedData.length === checkedList.length;
- 
+
   const onCheckboxPress = (value) => {
     const updatedCheckedList = [...checkedList];
     const index = updatedCheckedList.indexOf(value);
@@ -58,30 +59,26 @@ export default function ProfileSettingScreen({ navigation }) {
   };
 
   const fetchDataForLikedProducts = async (storedData) => {
-
-    const productDataArray = [];
-    for (const product of storedData) {
-      try {
-        const response = await fetch(`http://192.168.56.1:3000/orchids/${product.id}`);
-        if (!response.ok) {
-          // Xử lý trường hợp khi không tìm thấy sản phẩm (ví dụ: mã trạng thái 404)
-          if (response.status === 404) {
-            console.log(`Không tìm thấy sản phẩm với id ${product.id}`);
-          } else {
-            throw new Error(`Lỗi khi lấy dữ liệu sản phẩm: ${response.statusText}`);
-          }
-        } else {
-          const productData = await response.json();
-          productDataArray.push(productData);
+    try {
+      const productDataArray = [];
+      for (const product of storedData) {
+        try {
+          const filteredList = await dataList.filter(item => item.id === product.id);
+          productDataArray.push(...filteredList);
+        } catch (error) {
+          console.error('Error filtering data:', error);
         }
-      } catch (error) {
-        console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
       }
+      console.log('Product data array:', productDataArray);
+      setStoredData(productDataArray);
+    } catch (error) {
+      console.error('Error fetching data:', error);
     }
-    console.log('Product data array:', productDataArray);
-    setStoredData(productDataArray)
   };
 
+  console.log('====================================');
+  console.log(storedData);
+  console.log('====================================');
   useFocusEffect(
     useCallback(() => {
       setCheckedList([])
@@ -93,6 +90,8 @@ export default function ProfileSettingScreen({ navigation }) {
     }, []),
 
   );
+
+
   const handleLike = (index, product) => {
     const updatedLikedProducts = [...likedProducts];
     updatedLikedProducts[index] = !updatedLikedProducts[index];
@@ -240,10 +239,10 @@ export default function ProfileSettingScreen({ navigation }) {
           <Dialog.Title title="Xác nhận xóa " />
           <Text>Bạn có chắc muốn xóa những sản phẩm đã chọn</Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Button onPress={()=>{
-            handleDeleteSelectedItems(),
-            toggleDialog1()
-            }}  style={{ backgroundColor: 'red', margin: 9, borderRadius: 10, color: '#000' }}><Text style={{ color: '#fff' }}>Xác nhận</Text></Button>
+            <Button onPress={() => {
+              handleDeleteSelectedItems(),
+                toggleDialog1()
+            }} style={{ backgroundColor: 'red', margin: 9, borderRadius: 10, color: '#000' }}><Text style={{ color: '#fff' }}>Xác nhận</Text></Button>
             <Button onPress={toggleDialog1} style={{ backgroundColor: '#057594', margin: 9, borderRadius: 10, color: '#000' }}><Text style={{ color: '#fff' }}>Hủy</Text></Button>
           </View>
         </Dialog>

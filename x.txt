@@ -1,0 +1,76 @@
+GET    /posts
+GET    /posts/:id
+POST   /posts
+PUT    /posts/:id
+PATCH  /posts/:id
+DELETE /posts/:id
+
+////////////////////////////////
+lt → <
+lte → <=
+gt → >
+gte → >=
+ne → !=
+GET /posts?views_gt=9000
+
+////////////////////////////////
+GET /posts?_start=10&_end=20
+GET /posts?_start=10&_limit=10
+
+GET /posts?_page=1&_per_page=25
+
+
+săp xếp theo thứ tự tăng dần 
+GET /posts?_sort=id,-views
+
+
+
+lấy theo 
+http://localhost:3000/comments?data.title=ab
+trong đó data . title
+
+
+
+/////////////////
+tự động viết hoa 
+ autoCapitalize="characters"
+onChangeText={(text) => onChange(text.toUpperCase())}
+/////////////////
+tự động viết hoa chữ đầu 
+autoCapitalize="words"
+onChangeText={(text) => onChange(text.replace(/\b\w/g, (c) => c.toUpperCase()))}
+
+/////////////////
+
+nhập ko có đấu cách 
+
+onChangeText={(text) => onChange(text.replace(/\s/g, '').toUpperCase())}
+onChangeText={(text) => onChange(text.replace(/\s/g, ''))}
+
+/////////////////
+
+chỉ nhận số 
+onChangeText={(text) => onChange(text.replace(/\D/g, ''))}
+
+/////////////////
+chỉ nhận chữ 
+onChangeText={(text) => onChange(text.replace(/[^a-zA-Z]/g, ''))}
+ pattern: /^[a-zA-Z]+$/,
+/////////////////
+ báo lỗi thiếu hoặc thừa 
+  rules={{
+    required: true,
+    pattern: /^0[0-9]{9,10}$/,
+    minLength: 10,
+    maxLength: 11
+  }}
+{errors.phoneNumber?.type === 'minLength' && (
+  <Text style={styles.error}>Phone number must be at least 10 digits.</Text>
+)}
+{errors.phoneNumber?.type === 'maxLength' && (
+  <Text style={styles.error}>Phone number must be at most 11 digits.</Text>
+)}
+
+
+
+
